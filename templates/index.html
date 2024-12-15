@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Graphing Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Live Graphing Example</h1>
+    <div>
+        <!-- Input boxes for future use -->
+        <label for="input1">Input 1:</label>
+        <input type="text" id="input1" name="input1">
+        <br>
+        <label for="input2">Input 2:</label>
+        <input type="text" id="input2" name="input2">
+        <br>
+        
+        <!-- Buttons to start and stop the graphing -->
+        <button id="startButton">Start</button>
+        <button id="stopButton" disabled>Stop</button>
+    </div>
+
+    <div style="position: relative; height: 400px;">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        // Set up the chart and initial empty data
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [], // Time data will be added here
+                datasets: [{
+                    label: 'Force vs Time',
+                    data: [], // Force data will be added here
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: { display: true, text: 'Time (s)' },
+                    },
+                    y: {
+                        title: { display: true, text: 'Force' },
+                        beginAtZero: true,
+                    }
+                },
+                animation: false,
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        });
+
+        let counter = 0; // Variable to simulate time (for demo purposes)
+        let isGraphing = false; // Flag to track whether graphing is active
+
+        // Start button handler
+        document.getElementById('startButton').addEventListener('click', function() {
+            // Enable stop button and disable start button
+            document.getElementById('startButton').disabled = true;
+            document.getElementById('stopButton').disabled = false;
+            
+            // Clear existing data and reset the chart
+            chart.data.labels = [];
+            chart.data.datasets[0].data = [];
+            chart.update();
+            
+            isGraphing = true;
+
+            counter = 0; //reset counter
+
+            // Simulate data updates (replace with actual data collection later)
+            setInterval(function() {
+                if (isGraphing) {
+                    counter += 0.1; // Simulate time increment (e.g., 0.5 seconds)
+                    let randomForce = Math.random() * 10; // Simulate random force data
+
+                    // Add new data to chart
+                    chart.data.labels.push(counter);
+                    chart.data.datasets[0].data.push({ x: counter, y: randomForce });
+                    
+                    // Update the chart
+                    chart.update();
+                }
+            }, 100); // Update every 500ms (or adjust to your needs)
+        });
+
+        // Stop button handler
+        document.getElementById('stopButton').addEventListener('click', function() {
+            // Disable stop button and enable start button
+            document.getElementById('startButton').disabled = false;
+            document.getElementById('stopButton').disabled = true;
+            
+            isGraphing = false;
+            
+            // Optionally: Save the data to a CSV here or do further processing
+
+            // Example: Displaying the collected data in the console
+            console.log('Final Data:', chart.data.datasets[0].data);
+        });
+    </script>
+</body>
+</html>
