@@ -6,7 +6,6 @@ import csv
 
 app = Flask(__name__)
 
-# just making a quick test
 # Shared data structure for storing graph data
 graph_data = {"x": [], "y": []}
 stop_event = Event()  # Event to signal stopping the data generation
